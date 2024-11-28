@@ -8,7 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 def step_impl(context):
     context.homepage.open_page()
 
-
 @given("the '{field}' field is filled with '{text}'")
 def step_impl(context, field, text):
     field = '' if field == '[blank]' else field
@@ -27,8 +26,6 @@ def step_impl(context, button):
 def step_impl(context, option):
     context.homepage.click_option_button(option)
 
-
-
 @given("the '{link}' link is clicked")
 def step_impl(context, link):
     context.homepage.click_button(link)
@@ -43,10 +40,23 @@ def step_impl(context, item):
 def step_impl(context, button):
     context.homepage.click_button(button)
 
+@given("the '{button}' item button is clicked")
+def step_impl(context, button):
+    context.homepage.click_item_button(button)
+
+@given("the '{button}' removed button is clicked")
+def step_impl(context, button):
+    button = '' if button == '[blank]' else button
+    if(button != ''):
+        context.homepage.click_item_remove_button(button)
+
 @when("the '{button}' button is clicked")
 def step_impl(context, button):
     context.homepage.click_button(button)
 
+@when("the '{button}' item button is clicked")
+def step_impl(context, button):
+    context.homepage.click_item_button(button)
 
 @then("the '{error}' message is shown")
 def step_impl(context, error):
@@ -69,6 +79,10 @@ def step_impl(context, page):
 def step_impl(context, text):
     assert_that(context.homepage.get_current_url_full(),equal_to(text))
 
+@then("the '{media}' icon is shown")
+def step_impl(context, media):
+    assert_that(context.homepage.get_social(media),equal_to(media))
+
 @then("the 'Cart_count'  is '{number}'. Remove '{item1}' and '{item2}'")
 def step_impl(context, number, item1, item2):
     assert_that(context.homepage.get_cart_count(),equal_to(number))
@@ -78,3 +92,14 @@ def step_impl(context, number, item1, item2):
         context.homepage.click_item_remove_button(item1)
     if(item2 != ''):
         context.homepage.click_item_remove_button(item2)
+
+@then("the 'Cart_count'  is '{number}'. Reset state")
+def step_impl(context, number):
+    assert_that(context.homepage.get_cart_count(),equal_to(number))
+    context.homepage.click_button("Menu")
+    context.homepage.click_button("Reset")
+
+@then("the About page is shown")
+def step_impl(context):
+    assert_that(context.homepage.get_current_p(),equal_to("The world relies on your code. \
+                Test on thousands of different device, browser, and OS configurations–anywhere, any time."))

@@ -19,12 +19,27 @@ class Homepage:
     navigation_buttons = {
         "Login": (By.ID, "login-button"),
         "Cart": (By.CLASS_NAME, "shopping_cart_link"),
+        "Twitter": (By.CLASS_NAME, "social_twitter"),
+        "Facebook": (By.CLASS_NAME, "social_facebook"),
+        "LinkedIn": (By.CLASS_NAME, "social_linkedin"),
         "Checkout":(By.CLASS_NAME, "checkout_button"),
         "Continue":(By.ID, "continue"),
         "ContinueShopping":(By.ID, "continue-shopping"),
         "Finish":(By.ID, "finish"),
+        "Cancel":(By.ID, "cancel"),
+        "About":(By.ID, "about_sidebar_link"),
         "Menu":(By.ID, "react-burger-menu-btn"),
+        "All items":(By.ID, "inventory_sidebar_link"),
         "Logout":(By.ID, "logout_sidebar_link"),
+        "Reset":(By.ID, "reset_sidebar_link"),
+        "Back to products":(By.ID, "back-to-products"),
+    }
+    item_buttons = {
+        "Sauce Labs Bike Light":(By.ID, "item_0_title_link"),
+        "Sauce Labs Backpack":(By.ID, "item_4_title_link"),
+        "Sauce Labs Bolt T-Shirt":(By.ID, "item_1_title_link"),
+        "Sauce Labs Fleece Jacket":(By.ID, "item_5_title_link"),
+        "Sauce Labs Onesie":(By.ID, "item_2_title_link"),
     }
 
     item_cart_buttons = {
@@ -63,13 +78,19 @@ class Homepage:
     def click_button(self, button):
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.driver.find_element(*self.navigation_buttons[button]))).click()
         #self.driver.find_element(*self.navigation_buttons[button]).click()
-    
+    def click_about_button(self, button):
+        self.driver.find_element(*self.navigation_buttons[button]).click()
+    def get_social(self, media):
+        return self.driver.find_element(*self.navigation_buttons[media]).find_element(By.TAG_NAME, "a").text
+
     def click_option_button(self, option):
         dropdown  = self.driver.find_element(By.CLASS_NAME, "product_sort_container")
         select = Select(dropdown)
         select.select_by_value(option)
     def click_item_cart_button(self, item):
         self.driver.find_element(*self.item_cart_buttons[item]).click()
+    def click_item_button(self, item):
+        self.driver.find_element(*self.item_buttons[item]).click()
     def click_item_remove_button(self, item):
         self.driver.find_element(*self.item_remove_buttons[item]).click()
 
@@ -90,5 +111,6 @@ class Homepage:
             count = self.driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text
         except selenium.common.exceptions.NoSuchElementException:
             return '0'
-
         return count
+    def get_current_p(self):
+        return self.driver.find_element(By.TAG_NAME, "p").text
